@@ -93,13 +93,6 @@ function CommentsReplies(props: Props) {
   return (
     <li className="comment__replies-container">
       <div className="comment__actions">
-        <Button
-          requiresAuth={IS_WEB}
-          label={commentingEnabled ? __('Reply') : __('Log in to reply')}
-          className="comment__action"
-          onClick={handleCommentReply}
-          icon={ICONS.REPLY}
-        />
         {Boolean(numberOfComments) && (
           <Button
             className="comment__action"
@@ -134,20 +127,13 @@ function CommentsReplies(props: Props) {
                     claimIsMine={claimIsMine}
                     commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
                     linkedComment={linkedComment}
+                    handleCommentReply={handleCommentReply}
+                    commentingEnabled={commentingEnabled}
                   />
                 );
               })}
             </ul>
           </div>
-          {!isReplying && (
-            <Button
-              requiresAuth={IS_WEB}
-              label={commentingEnabled ? __('Reply') : __('Log in to reply')}
-              className="comment__action--nested"
-              onClick={handleCommentReply}
-              icon={ICONS.REPLY}
-            />
-          )}
         </div>
       )}
       {isExpanded && comments && (end < numberOfComments || start > 0) && (

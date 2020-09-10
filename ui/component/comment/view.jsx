@@ -14,6 +14,8 @@ import Icon from 'component/common/icon';
 import { FormField, Form } from 'component/common/form';
 import classnames from 'classnames';
 import usePersistedState from 'effects/use-persisted-state';
+import CommentReactions from 'component/commentReactions';
+import CommentsReplies from 'component/commentsReplies';
 
 type Props = {
   uri: string,
@@ -58,6 +60,8 @@ function Comment(props: Props) {
     deleteComment,
     blockChannel,
     linkedComment,
+    commentingEnabled,
+    handleCommentReply,
   } = props;
 
   const [isEditing, setEditing] = useState(false);
@@ -110,103 +114,117 @@ function Comment(props: Props) {
   return (
     <li
       className={classnames('comment', {
-        comment__reply: parentId !== null,
-        comment__highlighted: linkedComment && linkedComment.comment_id === commentId,
+        comment--reply: parentId !== null,
+        comment--highlighted: linkedComment && linkedComment.comment_id === commentId,
       })}
       id={commentId}
       onMouseOver={() => setMouseHover(true)}
       onMouseOut={() => setMouseHover(false)}
     >
-      <div className="comment__author-thumbnail">
-        {authorUri ? <ChannelThumbnail uri={authorUri} obscure={channelIsBlocked} small /> : <ChannelThumbnail small />}
-      </div>
-
-      <div className="comment__body_container">
-        <div className="comment__meta">
-          <div className="comment__meta-information">
-            {!author ? (
-              <span className="comment__author">{__('Anonymous')}</span>
-            ) : (
-              <Button
-                className="button--uri-indicator truncated-text comment__author"
-                navigate={authorUri}
-                label={author}
-              />
-            )}
-            {/* // link here */}
-            <Button
-              navigate={`${uri}?lc=${commentId}`}
-              label={
-                <time className="comment__time" dateTime={timePosted}>
-                  {DateTime.getTimeAgoStr(timePosted)}
-                </time>
-              }
-              className="button--uri-indicator"
-            />
-          </div>
-          <div className="comment__menu">
-            <Menu>
-              <MenuButton>
-                <Icon
-                  size={18}
-                  className={mouseIsHovering ? 'comment__menu-icon--hovering' : 'comment__menu-icon'}
-                  icon={ICONS.MORE_VERTICAL}
-                />
-              </MenuButton>
-              <MenuList className="menu__list--comments">
-                {commentIsMine ? (
-                  <>
-                    <MenuItem className="comment__menu-option" onSelect={() => setEditing(true)}>
-                      {__('Edit')}
-                    </MenuItem>
-                    <MenuItem className="comment__menu-option" onSelect={() => deleteComment(commentId)}>
-                      {__('Delete')}
-                    </MenuItem>
-                  </>
-                ) : (
-                  <MenuItem className="comment__menu-option" onSelect={() => blockChannel(authorUri)}>
-                    {__('Block Channel')}
-                  </MenuItem>
-                )}
-              </MenuList>
-            </Menu>
-          </div>
-        </div>
-        <div>
-          {isEditing ? (
-            <Form onSubmit={handleSubmit}>
-              <FormField
-                type={!SIMPLE_SITE && advancedEditor ? 'markdown' : 'textarea'}
-                name="editing_comment"
-                value={editedMessage}
-                charCount={charCount}
-                onChange={handleEditMessageChanged}
-                textAreaMaxLength={FF_MAX_CHARS_IN_COMMENT}
-              />
-              <div className="section__actions">
-                <Button
-                  button="primary"
-                  type="submit"
-                  label={__('Done')}
-                  requiresAuth={IS_WEB}
-                  disabled={message === editedMessage}
-                />
-                <Button button="link" label={__('Cancel')} onClick={() => setEditing(false)} />
-              </div>
-            </Form>
-          ) : editedMessage.length >= LENGTH_TO_COLLAPSE ? (
-            <div className="comment__message">
-              {/* <Expandable> */}
-              <MarkdownPreview content={message} />
-              {/* </Expandable> */}
-            </div>
+      <div className="comment__content">
+        <div className="comment__author-thumbnail">
+          {authorUri ? (
+            <ChannelThumbnail uri={authorUri} obscure={channelIsBlocked} small />
           ) : (
-            <div className="comment__message">
-              <MarkdownPreview content={message} />
-            </div>
+            <ChannelThumbnail small />
           )}
         </div>
+
+        <div className="comment__body_container">
+          <div className="comment__meta">
+            <div className="comment__meta-information">
+              {!author ? (
+                <span className="comment__author">{__('Anonymous')}</span>
+              ) : (
+                <Button
+                  className="button--uri-indicator truncated-text comment__author"
+                  navigate={authorUri}
+                  label={author}
+                />
+              )}
+              {/* // link here */}
+              <Button
+                navigate={`${uri}?lc=${commentId}`}
+                label={
+                  <time className="comment__time" dateTime={timePosted}>
+                    {DateTime.getTimeAgoStr(timePosted)}
+                  </time>
+                }
+                className="button--uri-indicator"
+              />
+            </div>
+            <div className="comment__menu">
+              <Menu>
+                <MenuButton>
+                  <Icon
+                    size={18}
+                    className={mouseIsHovering ? 'comment__menu-icon--hovering' : 'comment__menu-icon'}
+                    icon={ICONS.MORE_VERTICAL}
+                  />
+                </MenuButton>
+                <MenuList className="menu__list--comments">
+                  {commentIsMine ? (
+                    <>
+                      <MenuItem className="comment__menu-option" onSelect={() => setEditing(true)}>
+                        {__('Edit')}
+                      </MenuItem>
+                      <MenuItem className="comment__menu-option" onSelect={() => deleteComment(commentId)}>
+                        {__('Delete')}
+                      </MenuItem>
+                    </>
+                  ) : (
+                    <MenuItem className="comment__menu-option" onSelect={() => blockChannel(authorUri)}>
+                      {__('Block Channel')}
+                    </MenuItem>
+                  )}
+                </MenuList>
+              </Menu>
+            </div>
+          </div>
+          <div>
+            {isEditing ? (
+              <Form onSubmit={handleSubmit}>
+                <FormField
+                  type={!SIMPLE_SITE && advancedEditor ? 'markdown' : 'textarea'}
+                  name="editing_comment"
+                  value={editedMessage}
+                  charCount={charCount}
+                  onChange={handleEditMessageChanged}
+                  textAreaMaxLength={FF_MAX_CHARS_IN_COMMENT}
+                />
+                <div className="section__actions">
+                  <Button
+                    button="primary"
+                    type="submit"
+                    label={__('Done')}
+                    requiresAuth={IS_WEB}
+                    disabled={message === editedMessage}
+                  />
+                  <Button button="link" label={__('Cancel')} onClick={() => setEditing(false)} />
+                </div>
+              </Form>
+            ) : (
+              <>
+                <div className="comment__message">
+                  <MarkdownPreview content={message} />
+                </div>
+
+                <div className="comment__actions">
+                  <CommentReactions />
+                  <Button
+                    requiresAuth={IS_WEB}
+                    label={commentingEnabled ? __('Reply') : __('Log in to reply')}
+                    className="comment__action"
+                    onClick={handleCommentReply}
+                    icon={ICONS.REPLY}
+                  />
+                </div>
+              </>
+            )}
+          </div>
+        </div>
       </div>
+      <CommentsReplies uri={uri} parentId={commentId} linkedComment={linkedComment} />
     </li>
   );
 }

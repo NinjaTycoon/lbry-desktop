@@ -144,10 +144,10 @@ class FilePage extends React.Component<Props> {
     return (
       <Page className="file-page" filePage>
         <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
-          {this.renderFilePageLayout(uri, renderMode, costInfo ? costInfo.cost : null)}
+          {/* {this.renderFilePageLayout(uri, renderMode, costInfo ? costInfo.cost : null)}
           <FileDescription uri={uri} />
           <FileValues uri={uri} />
-          <FileDetails uri={uri} />
+          <FileDetails uri={uri} /> */}
           {/* <WaitUntilOnPage lastUpdateDate={this.lastReset} skipWait={Boolean(linkedComment)}> */}
           <CommentsList uri={uri} linkedComment={linkedComment} />
           {/* </WaitUntilOnPage> */}

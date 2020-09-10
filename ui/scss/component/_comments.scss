@@ -25,7 +25,7 @@ $thumbnailWidthSmall: 2rem;
 
 .comment {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   font-size: var(--font-small);
   margin: 0;
 
@@ -43,6 +43,11 @@ $thumbnailWidthSmall: 2rem;
   }
 }
 
+.comment__content {
+  display: flex;
+  flex-direction: row;
+}
+
 .comment__replies-container {
   margin: 0;
 }
@@ -57,7 +62,7 @@ $thumbnailWidthSmall: 2rem;
   }
 }
 
-.comment__reply {
+.comment--reply {
   margin: 0;
 
   &:not(:first-child) {
@@ -100,7 +105,7 @@ $thumbnailWidthSmall: 2rem;
   margin-right: var(--spacing-xs);
 }
 
-.comment__highlighted {
+.comment--highlighted {
   background: var(--color-comment-highlighted);
   box-shadow: 0 0 0 var(--spacing-xs) var(--color-comment-highlighted);
   border-radius: 4px;
@@ -191,7 +196,7 @@ $thumbnailWidthSmall: 2rem;
 .comment__actions {
   display: flex;
   margin-top: var(--spacing-s);
-  margin-left: calc(#{$thumbnailWidthSmall} + var(--spacing-xs));
+  //   margin-left: calc(#{$thumbnailWidthSmall} + var(--spacing-xs));
 
   > *:not(:last-child) {
     margin-right: var(--spacing-xs);
@@ -206,7 +211,7 @@ $thumbnailWidthSmall: 2rem;
   }
 
   @media (min-width: $breakpoint-small) {
-    margin-left: calc(#{$thumbnailWidth} + var(--spacing-m));
+    // margin-left: calc(#{$thumbnailWidth} + var(--spacing-m));
   }
 }
 
