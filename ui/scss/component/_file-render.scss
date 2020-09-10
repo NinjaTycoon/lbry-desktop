@@ -198,12 +198,21 @@
 }
 
 .file-viewer__overlay-logo {
-  color: var(--color-white);
-  font-weight: bold;
+  height: 3.5rem;
+  width: 12rem;
+  display: flex;
+  align-items: center;
 
-  .icon {
-    height: 30px;
-    stroke-width: 5px;
+  &:hover {
+    filter: drop-shadow(1px 2px 10px var(--color-gray-3));
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin-right: var(--spacing-m);
+
+    .button__label {
+      display: none;
+    }
   }
 }
 
@@ -214,10 +223,14 @@
 .file-viewer__embedded-header {
   position: absolute;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
   top: 0;
   z-index: 2;
+  height: 4rem;
+  padding-left: var(--spacing-m);
+  padding-right: var(--spacing-s);
   font-size: var(--font-large);
   overflow-x: hidden;
   text-overflow: ellipsis;
@@ -226,7 +239,6 @@
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADGCAYAAAAT+OqFAAAAdklEQVQoz42QQQ7AIAgEF/T/D+kbq/RWAlnQyyazA4aoAB4FsBSA/bFjuF1EOL7VbrIrBuusmrt4ZZORfb6ehbWdnRHEIiITaEUKa5EJqUakRSaEYBJSCY2dEstQY7AuxahwXFrvZmWl2rh4JZ07z9dLtesfNj5q0FU3A5ObbwAAAABJRU5ErkJggg==);
 
   .button {
-    padding: var(--spacing-s);
     color: var(--color-white);
 
     .button__label {
@@ -241,6 +253,10 @@
   .credit-amount,
   .icon--Key {
     margin-right: var(--spacing-m);
+  }
+
+  @media (min-width: $breakpoint-small) {
+    padding: 0 var(--spacing-l);
   }
 }
 
@@ -258,6 +274,8 @@
   font-size: var(--font-small);
   margin-left: var(--spacing-m);
   white-space: nowrap;
+  position: relative;
+  overflow: hidden;
 
   & > *:not(:last-child) {
     margin-right: var(--spacing-s);
@@ -337,6 +355,8 @@
   }
 
   .vjs-control-bar {
+    background-color: #00000095;
+
     .vjs-remaining-time {
       display: none;
     }

@@ -49,13 +49,6 @@ function FileActions(props: Props) {
 
   const lhsSection = (
     <>
-      <Button
-        button="alt"
-        icon={ICONS.SHARE}
-        label={__('Share')}
-        onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable })}
-      />
-
       {!SIMPLE_SITE && (
         <div className="button-group">
           <Button
@@ -75,7 +68,14 @@ function FileActions(props: Props) {
           )}
         </div>
       )}
-      <ClaimSupportButton uri={uri} />
+      <ClaimSupportButton uri={uri} fileAction />
+      <Button
+        button="alt"
+        className="button--file-action"
+        icon={ICONS.SHARE}
+        label={__('Share')}
+        onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable })}
+      />
     </>
   );
 
@@ -86,6 +86,7 @@ function FileActions(props: Props) {
       {claimIsMine && (
         <Button
           button="alt"
+          className="button--file-action"
           icon={ICONS.EDIT}
           label={__('Edit')}
           navigate="/$/upload"
@@ -99,6 +100,7 @@ function FileActions(props: Props) {
         <Button
           title={__('Remove from your library')}
           button="alt"
+          className="button--file-action"
           icon={ICONS.DELETE}
           description={__('Delete')}
           onClick={() => openModal(MODALS.CONFIRM_FILE_REMOVE, { uri })}

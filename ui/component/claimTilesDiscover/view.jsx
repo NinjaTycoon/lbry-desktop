@@ -1,4 +1,5 @@
 // @flow
+import * as CS from 'constants/claim_search';
 import React from 'react';
 import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
 import ClaimPreviewTile from 'component/claimPreviewTile';
@@ -17,6 +18,7 @@ type Props = {
   // claim search options are below
   tags: Array<string>,
   hiddenUris: Array<string>,
+  claimIds?: Array<string>,
   channelIds?: Array<string>,
   notChannelIds?: Array<string>,
   pageSize: number,
@@ -26,6 +28,7 @@ type Props = {
   timestamp?: string,
   feeAmount?: string,
   limitClaimsPerChannel?: number,
+  hideRepostLabel: boolean,
 };
 
 function ClaimTilesDiscover(props: Props) {
@@ -38,6 +41,7 @@ function ClaimTilesDiscover(props: Props) {
     // Below are options to pass that are forwarded to claim_search
     tags,
     channelIds,
+    claimIds,
     notChannelIds,
     orderBy,
     pageSize = 8,
@@ -47,17 +51,18 @@ function ClaimTilesDiscover(props: Props) {
     timestamp,
     feeAmount,
     limitClaimsPerChannel,
+    hideRepostLabel = false,
   } = props;
   const { location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const feeAmountInUrl = urlParams.get('fee_amount');
-  const feeAmountParam = feeAmountInUrl || feeAmount;
+  const feeAmountParam = feeAmountInUrl || feeAmount || CS.FEE_AMOUNT_ONLY_FREE;
   const [hasSearched, setHasSearched] = React.useState(false);
   const options: {
     page_size: number,
     no_totals: boolean,
     any_tags: Array<string>,
-    channel_ids: Array<string>,
+    claim_ids?: Array<string>,
     channel_ids: Array<string>,
     not_channel_ids: Array<string>,
     not_tags: Array<string>,
@@ -112,6 +117,10 @@ function ClaimTilesDiscover(props: Props) {
     options.timestamp = timestamp;
   }
 
+  if (claimIds) {
+    options.claim_ids = claimIds;
+  }
+
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   const uris = (prefixUris || []).concat(claimSearchByQuery[claimSearchCacheQuery] || []);
   const shouldPerformSearch = !hasSearched || uris.length === 0;
@@ -129,7 +138,7 @@ function ClaimTilesDiscover(props: Props) {
   return (
     <ul className="claim-grid">
       {uris && uris.length
-        ? uris.map(uri => <ClaimPreviewTile key={uri} uri={uri} />)
+        ? uris.map(uri => <ClaimPreviewTile key={uri} uri={uri} hideRepostLabel={hideRepostLabel} />)
         : new Array(pageSize).fill(1).map((x, i) => <ClaimPreviewTile key={i} placeholder />)}
     </ul>
   );

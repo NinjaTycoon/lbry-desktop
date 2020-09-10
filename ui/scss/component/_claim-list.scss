@@ -30,9 +30,11 @@
   transform: translateY(-130%);
   font-size: var(--font-xsmall);
   color: var(--color-text-subtitle);
+  overflow: visible;
 
   .icon {
     margin-right: var(--spacing-xs);
+    stroke: var(--color-text-subtitle);
   }
 
   @media (max-width: $breakpoint-small) {
@@ -163,7 +165,6 @@
 
   .claim-preview__actions {
     align-self: flex-end;
-    margin-top: 0;
     margin-bottom: auto;
     justify-content: flex-end;
     width: auto;
@@ -227,7 +228,6 @@
   align-self: flex-end;
   display: flex;
   justify-content: space-between;
-  margin-top: auto;
   width: 100%;
 }
 
@@ -306,6 +306,15 @@
 
   &:not(:first-of-type) {
     margin-top: var(--spacing-xl);
+  }
+}
+
+.claim-grid__title--first {
+  text-align: center;
+  width: 100%;
+
+  .no-evil {
+    font-size: var(--font-heading);
   }
 }
 
@@ -390,6 +399,10 @@
       display: none;
     }
   }
+}
+
+.claim-preview--channel {
+  align-items: flex-start;
 }
 
 .claim-tile__title {

@@ -1,6 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
-import * as MODALS from 'constants/modal_types';
+// import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import { SETTINGS } from 'lbry-redux';
@@ -14,7 +14,7 @@ import SyncToggle from 'component/syncToggle';
 import Card from 'component/common/card';
 import SettingAccountPassword from 'component/settingAccountPassword';
 import { getPasswordFromCookie } from 'util/saved-passwords';
-import { Lbryio } from 'lbryinc';
+// import { Lbryio } from 'lbryinc';
 
 type Price = {
   currency: string,
@@ -23,15 +23,15 @@ type Price = {
 
 type SetDaemonSettingArg = boolean | string | number;
 
-type DarkModeTimes = {
-  from: { hour: string, min: string, formattedTime: string },
-  to: { hour: string, min: string, formattedTime: string },
-};
+// type DarkModeTimes = {
+//   from: { hour: string, min: string, formattedTime: string },
+//   to: { hour: string, min: string, formattedTime: string },
+// };
 
-type OptionTimes = {
-  fromTo: string,
-  time: string,
-};
+// type OptionTimes = {
+//   fromTo: string,
+//   time: string,
+// };
 
 type DaemonSettings = {
   download_dir: string,
@@ -50,9 +50,9 @@ type Props = {
   isAuthenticated: boolean,
   instantPurchaseEnabled: boolean,
   instantPurchaseMax: Price,
-  currentTheme: string,
-  themes: Array<string>,
-  automaticDarkModeEnabled: boolean,
+  //   currentTheme: string,
+  //   themes: Array<string>,
+  //   automaticDarkModeEnabled: boolean,
   autoplay: boolean,
   updateWalletStatus: () => void,
   walletEncrypted: boolean,
@@ -61,8 +61,8 @@ type Props = {
   floatingPlayer: boolean,
   hideReposts: ?boolean,
   clearPlayingUri: () => void,
-  darkModeTimes: DarkModeTimes,
-  setDarkTime: (string, {}) => void,
+  //   darkModeTimes: DarkModeTimes,
+  //   setDarkTime: (string, {}) => void,
   openModal: string => void,
   language?: string,
   syncEnabled: boolean,
@@ -82,9 +82,9 @@ class SettingsPage extends React.PureComponent<Props, State> {
       storedPassword: false,
     };
 
-    (this: any).onThemeChange = this.onThemeChange.bind(this);
-    (this: any).onAutomaticDarkModeChange = this.onAutomaticDarkModeChange.bind(this);
-    (this: any).onChangeTime = this.onChangeTime.bind(this);
+    // (this: any).onThemeChange = this.onThemeChange.bind(this);
+    // (this: any).onAutomaticDarkModeChange = this.onAutomaticDarkModeChange.bind(this);
+    // (this: any).onChangeTime = this.onChangeTime.bind(this);
     (this: any).onConfirmForgetPassword = this.onConfirmForgetPassword.bind(this);
   }
 
@@ -101,19 +101,19 @@ class SettingsPage extends React.PureComponent<Props, State> {
     }
   }
 
-  onThemeChange(event: SyntheticInputEvent<*>) {
-    const { value } = event.target;
+  //   onThemeChange(event: SyntheticInputEvent<*>) {
+  //     const { value } = event.target;
 
-    if (value === 'dark') {
-      this.onAutomaticDarkModeChange(false);
-    }
+  //     if (value === 'dark') {
+  //       this.onAutomaticDarkModeChange(false);
+  //     }
 
-    this.props.setClientSetting(SETTINGS.THEME, value);
-  }
+  //     this.props.setClientSetting(SETTINGS.THEME, value);
+  //   }
 
-  onAutomaticDarkModeChange(value: boolean) {
-    this.props.setClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED, value);
-  }
+  //   onAutomaticDarkModeChange(value: boolean) {
+  //     this.props.setClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED, value);
+  //   }
 
   onConfirmForgetPassword() {
     const { confirmForgetPassword } = this.props;
@@ -124,19 +124,19 @@ class SettingsPage extends React.PureComponent<Props, State> {
     });
   }
 
-  onChangeTime(event: SyntheticInputEvent<*>, options: OptionTimes) {
-    const { value } = event.target;
+  //   onChangeTime(event: SyntheticInputEvent<*>, options: OptionTimes) {
+  //     const { value } = event.target;
 
-    this.props.setDarkTime(value, options);
-  }
+  //     this.props.setDarkTime(value, options);
+  //   }
 
-  to12Hour(time: string) {
-    const now = new Date(0, 0, 0, Number(time));
+  //   to12Hour(time: string) {
+  //     const now = new Date(0, 0, 0, Number(time));
 
-    const hour = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit' });
+  //     const hour = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit' });
 
-    return hour;
-  }
+  //     return hour;
+  //   }
 
   setDaemonSetting(name: string, value: ?SetDaemonSettingArg): void {
     this.props.setDaemonSetting(name, value);
@@ -150,11 +150,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
     const {
       daemonSettings,
       allowAnalytics,
-      showNsfw,
+      //   showNsfw,
       isAuthenticated,
-      currentTheme,
-      themes,
-      automaticDarkModeEnabled,
+      //   currentTheme,
+      //   themes,
+      //   automaticDarkModeEnabled,
       autoplay,
       walletEncrypted,
       // autoDownload,
@@ -163,16 +163,16 @@ class SettingsPage extends React.PureComponent<Props, State> {
       toggle3PAnalytics,
       userBlockedChannelsCount,
       floatingPlayer,
-      hideReposts,
+      //   hideReposts,
       clearPlayingUri,
-      darkModeTimes,
+      //   darkModeTimes,
       clearCache,
-      openModal,
+      //   openModal,
     } = this.props;
     const { storedPassword } = this.state;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
-    const startHours = ['18', '19', '20', '21'];
-    const endHours = ['5', '6', '7', '8'];
+    // const startHours = ['18', '19', '20', '21'];
+    // const endHours = ['5', '6', '7', '8'];
 
     return (
       <Page
@@ -246,7 +246,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     )}
                   />
 
-                  <FormField
+                  {/* <FormField
                     type="checkbox"
                     name="hide_reposts"
                     onChange={e => {
@@ -260,7 +260,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     checked={hideReposts}
                     label={__('Hide reposts')}
                     helper={__('You will not see reposts by people you follow or receive email notifying about them.')}
-                  />
+                  /> */}
 
                   {/* <FormField
                     type="checkbox"
@@ -271,7 +271,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     helper={__('Anonymous content is published without a channel.')}
                   /> */}
 
-                  <FormField
+                  {/* <FormField
                     type="checkbox"
                     name="show_nsfw"
                     onChange={() =>
@@ -284,12 +284,12 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     helper={__(
                       'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
                     )}
-                  />
+                  /> */}
                 </React.Fragment>
               }
             />
 
-            <Card
+            {/* <Card
               title={__('Appearance')}
               actions={
                 <React.Fragment>
@@ -350,7 +350,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   </fieldset-section>
                 </React.Fragment>
               }
-            />
+            /> */}
 
             {/* @if TARGET='app' */}
             <Card

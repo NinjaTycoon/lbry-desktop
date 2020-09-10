@@ -32,6 +32,7 @@ type Props = {
   doSetClientSetting: (string, boolean) => void,
   setPage: number => void,
   doSyncClientSettings: () => void,
+  hideFilters: boolean,
 };
 
 function ClaimListHeader(props: Props) {
@@ -55,6 +56,7 @@ function ClaimListHeader(props: Props) {
     doSetClientSetting,
     doSyncClientSettings,
     setPage,
+    hideFilters,
   } = props;
   const { action, push, location } = useHistory();
   const { search } = location;
@@ -205,24 +207,25 @@ function ClaimListHeader(props: Props) {
       <div className="claim-search__wrapper">
         <div className="claim-search__top">
           <div className="claim-search__top-row">
-            {CS.ORDER_BY_TYPES.map(type => (
-              <Button
-                key={type}
-                button="alt"
-                onClick={e =>
-                  handleChange({
-                    key: CS.ORDER_BY_KEY,
-                    value: type,
-                  })
-                }
-                className={classnames(`button-toggle button-toggle--${type}`, {
-                  'button-toggle--active': orderParam === type,
-                })}
-                disabled={orderBy}
-                icon={toCapitalCase(type)}
-                label={__(toCapitalCase(type))}
-              />
-            ))}
+            {!hideFilters &&
+              CS.ORDER_BY_TYPES.map(type => (
+                <Button
+                  key={type}
+                  button="alt"
+                  onClick={e =>
+                    handleChange({
+                      key: CS.ORDER_BY_KEY,
+                      value: type,
+                    })
+                  }
+                  className={classnames(`button-toggle button-toggle--${type}`, {
+                    'button-toggle--active': orderParam === type,
+                  })}
+                  disabled={orderBy}
+                  icon={toCapitalCase(type)}
+                  label={__(toCapitalCase(type))}
+                />
+              ))}
           </div>
 
           <div>

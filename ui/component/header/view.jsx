@@ -11,7 +11,7 @@ import Icon from 'component/common/icon';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Tooltip from 'component/common/tooltip';
 import NavigationButton from 'component/navigationButton';
-import { LOGO_TITLE } from 'config';
+// import { LOGO_TITLE } from 'config';
 import { useIsMobile } from 'effects/use-screensize';
 import NotificationBubble from 'component/notificationBubble';
 import NotificationHeaderButton from 'component/notificationHeaderButton';
@@ -20,6 +20,9 @@ import NotificationHeaderButton from 'component/notificationHeaderButton';
 import { remote } from 'electron';
 import { IS_MAC } from 'component/app/view';
 // @endif
+import OdyseeLogo from './odysee_logo.png';
+import OdyseeLogoWithWhiteText from './odysee_white.png';
+import OdyseeLogoWithText from './odysee.png';
 
 type Props = {
   balance: string,
@@ -59,6 +62,7 @@ type Props = {
   sidebarOpen: boolean,
   setSidebarOpen: boolean => void,
   isAbsoluteSideNavHidden: boolean,
+  hideCancel: boolean,
 };
 
 const Header = (props: Props) => {
@@ -83,6 +87,7 @@ const Header = (props: Props) => {
     sidebarOpen,
     setSidebarOpen,
     isAbsoluteSideNavHidden,
+    hideCancel,
   } = props;
   const isMobile = useIsMobile();
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
@@ -187,6 +192,7 @@ const Header = (props: Props) => {
               className="header__navigation-item menu__title header__navigation-item--balance"
               label={getWalletTitle()}
               icon={ICONS.LBC}
+              iconSize={20}
               // @if TARGET='app'
               onDoubleClick={e => {
                 e.stopPropagation();
@@ -210,6 +216,20 @@ const Header = (props: Props) => {
               )}
               <Button
                 className="header__navigation-item header__navigation-item--lbry header__navigation-item--button-mobile"
+                onClick={() => {
+                  if (history.location.pathname === '/') window.location.reload();
+                }}
+                {...homeButtonNavigationProps}
+              >
+                <img src={OdyseeLogo} className="header__odysee mobile-only" />
+                <img
+                  src={currentTheme === 'light' ? OdyseeLogoWithText : OdyseeLogoWithWhiteText}
+                  className="header__odysee mobile-hidden"
+                />
+              </Button>
+
+              {/* <Button
+                className="header__navigation-item header__navigation-item--lbry header__navigation-item--button-mobile"
                 // @if TARGET='app'
                 label={'LBRY'}
                 // @endif
@@ -226,7 +246,7 @@ const Header = (props: Props) => {
                 }}
                 // @endif
                 {...homeButtonNavigationProps}
-              />
+              /> */}
 
               {!authHeader && (
                 <div className="header__center">
@@ -264,6 +284,10 @@ const Header = (props: Props) => {
                         <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CHANNEL_NEW}`)}>
                           <Icon aria-hidden icon={ICONS.CHANNEL} />
                           {__('New Channel')}
+                        </MenuItem>
+                        <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.YOUTUBE_SYNC}`)}>
+                          <Icon aria-hidden icon={ICONS.YOUTUBE} />
+                          {__('Sync YouTube Channel')}
                         </MenuItem>
                       </MenuList>
                     </Menu>
@@ -356,11 +380,13 @@ const Header = (props: Props) => {
               <div className={classnames('header__menu', { 'header__menu--with-balance': !IS_WEB || authenticated })}>
                 {(!IS_WEB || authenticated) && (
                   <Button
+                    button="link"
                     aria-label={__('Your wallet')}
                     navigate={`/$/${PAGES.WALLET}`}
                     className="header__navigation-item menu__title header__navigation-item--balance"
                     label={getWalletTitle()}
                     icon={ICONS.LBC}
+                    iconSize={20}
                     // @if TARGET='app'
                     onDoubleClick={e => {
                       e.stopPropagation();
@@ -371,13 +397,19 @@ const Header = (props: Props) => {
 
                 {IS_WEB && !authenticated && (
                   <div className="header__auth-buttons">
-                    <Button navigate={`/$/${PAGES.AUTH_SIGNIN}`} button="link" label={__('Log In')} />
+                    <Button
+                      navigate={`/$/${PAGES.AUTH_SIGNIN}`}
+                      button="link"
+                      label={__('Log In')}
+                      className="mobile-hidden"
+                    />
                     <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign Up')} />
                   </div>
                 )}
               </div>
             ) : (
-              !isVerifyPage && (
+              !isVerifyPage &&
+              !hideCancel && (
                 <div className="header__menu">
                   {/* Add an empty span here so we can use the same style as above */}
                   {/* This pushes the close button to the right side */}
