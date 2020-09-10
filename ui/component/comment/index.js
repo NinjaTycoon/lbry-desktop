@@ -5,6 +5,7 @@ import {
   makeSelectClaimForUri,
   makeSelectThumbnailForUri,
   makeSelectIsUriResolving,
+  selectMyChannelClaims,
 } from 'lbry-redux';
 import { doCommentAbandon, doCommentUpdate } from 'redux/actions/comments';
 import { doToggleBlockChannel } from 'redux/actions/blocked';
@@ -21,6 +22,7 @@ const select = (state, props) => ({
   channelIsBlocked: props.authorUri && selectChannelIsBlocked(props.authorUri)(state),
   commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
   isFetchingComments: selectIsFetchingComments(state),
+  myChannels: selectMyChannelClaims(state),
 });
 
 const perform = dispatch => ({
@@ -28,6 +30,7 @@ const perform = dispatch => ({
   updateComment: (commentId, comment) => dispatch(doCommentUpdate(commentId, comment)),
   deleteComment: commentId => dispatch(doCommentAbandon(commentId)),
   blockChannel: channelUri => dispatch(doToggleBlockChannel(channelUri)),
+  doToast: options => dispatch(doToast(options)),
 });
 
 export default connect(select, perform)(Comment);

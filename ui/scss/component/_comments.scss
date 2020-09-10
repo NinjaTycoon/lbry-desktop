@@ -8,6 +8,7 @@ $thumbnailWidthSmall: 2rem;
 }
 
 .comments--replies {
+  list-style-type: none;
   margin-left: var(--spacing-m);
   flex: 1;
 }
@@ -196,7 +197,6 @@ $thumbnailWidthSmall: 2rem;
 .comment__actions {
   display: flex;
   margin-top: var(--spacing-s);
-  //   margin-left: calc(#{$thumbnailWidthSmall} + var(--spacing-xs));
 
   > *:not(:last-child) {
     margin-right: var(--spacing-xs);
@@ -209,10 +209,12 @@ $thumbnailWidthSmall: 2rem;
   .button__label {
     margin-left: 0;
   }
+}
 
-  @media (min-width: $breakpoint-small) {
-    // margin-left: calc(#{$thumbnailWidth} + var(--spacing-m));
-  }
+.comment__actions--nested {
+  @extend .comment__actions;
+  margin-left: calc((#{$thumbnailWidthSmall} + var(--spacing-l)));
+  margin-top: var(--spacing-m);
 }
 
 .comment__action {

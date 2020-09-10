@@ -76,7 +76,7 @@ function CommentList(props: Props) {
   }
 
   const displayedComments = prepareComments(comments, linkedComment).slice(start, end);
-
+  console.log('displayed', displayedComments);
   return (
     <Card
       title={
@@ -109,7 +109,6 @@ function CommentList(props: Props) {
                     claimId={comment.claim_id}
                     commentId={comment.comment_id}
                     message={comment.comment}
-                    parentId={comment.parent_id || null}
                     timePosted={comment.timestamp * 1000}
                     claimIsMine={claimIsMine}
                     commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}

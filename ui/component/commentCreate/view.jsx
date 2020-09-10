@@ -96,6 +96,8 @@ export function CommentCreate(props: Props) {
     );
   }
 
+  console.log('parentId', parentId);
+
   return (
     <Form
       onSubmit={handleSubmit}

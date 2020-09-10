@@ -1,7 +1,8 @@
 // @flow
 import * as ICONS from 'constants/icons';
+import * as PAGES from 'constants/pages';
 import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
-import { SIMPLE_SITE } from 'config';
+import { SITE_NAME, SIMPLE_SITE } from 'config';
 import React, { useEffect, useState } from 'react';
 import { isEmpty } from 'util/object';
 import DateTime from 'component/dateTime';
@@ -16,6 +17,7 @@ import classnames from 'classnames';
 import usePersistedState from 'effects/use-persisted-state';
 import CommentReactions from 'component/commentReactions';
 import CommentsReplies from 'component/commentsReplies';
+import { useHistory } from 'react-router';
 
 type Props = {
   uri: string,
@@ -61,16 +63,22 @@ function Comment(props: Props) {
     blockChannel,
     linkedComment,
     commentingEnabled,
-    handleCommentReply,
+    myChannels,
+    doToast,
+    hideReplyButton,
   } = props;
-
+  const {
+    push,
+    location: { pathname },
+  } = useHistory();
+  const [isReplying, setReplying] = React.useState(false);
   const [isEditing, setEditing] = useState(false);
   const [editedMessage, setCommentValue] = useState(message);
   const [charCount, setCharCount] = useState(editedMessage.length);
-
   // used for controlling the visibility of the menu icon
   const [mouseIsHovering, setMouseHover] = useState(false);
   const [advancedEditor] = usePersistedState('comment-editor-mode', false);
+  const hasChannels = myChannels && myChannels.length > 0;
 
   // to debounce subsequent requests
   const shouldFetch =
@@ -111,11 +119,20 @@ function Comment(props: Props) {
     setEditing(false);
   }
 
+  function handleCommentReply() {
+    if (!hasChannels) {
+      push(`/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`);
+      doToast({ message: __('A channel is required to comment on %SITE_NAME%', { SITE_NAME }) });
+    } else {
+      setReplying(!isReplying);
+    }
+  }
+
   return (
     <li
       className={classnames('comment', {
-        comment--reply: parentId !== null,
-        comment--highlighted: linkedComment && linkedComment.comment_id === commentId,
+        'comment--reply': parentId !== null,
+        'comment--highlighted': linkedComment && linkedComment.comment_id === commentId,
       })}
       id={commentId}
       onMouseOver={() => setMouseHover(true)}
@@ -211,20 +228,28 @@ function Comment(props: Props) {
 
                 <div className="comment__actions">
                   <CommentReactions />
-                  <Button
-                    requiresAuth={IS_WEB}
-                    label={commentingEnabled ? __('Reply') : __('Log in to reply')}
-                    className="comment__action"
-                    onClick={handleCommentReply}
-                    icon={ICONS.REPLY}
-                  />
+                  {!hideReplyButton && (
+                    <Button
+                      requiresAuth={IS_WEB}
+                      label={commentingEnabled ? __('Reply') : __('Log in to reply')}
+                      className="comment__action"
+                      onClick={handleCommentReply}
+                      icon={ICONS.REPLY}
+                    />
+                  )}
                 </div>
               </>
             )}
           </div>
         </div>
       </div>
-      <CommentsReplies uri={uri} parentId={commentId} linkedComment={linkedComment} />
+      <CommentsReplies
+        uri={uri}
+        parentId={commentId}
+        linkedComment={linkedComment}
+        isReplying={isReplying}
+        setReplying={setReplying}
+      />
     </li>
   );
 }
